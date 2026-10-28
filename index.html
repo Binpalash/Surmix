@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#25133f"><title>Surmix</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--bg:#100d19;--panel:#1d1729;--panel2:#282038;--text:#f8f4ff;--muted:#b9adc9;--accent:#d6a8ff;--accentText:#28133d;--line:#40344f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}main{max-width:600px;margin:auto;padding:15px 13px 32px}.hero{padding:22px 19px;border-radius:22px;background:linear-gradient(140deg,#21143b,#63358a);margin-bottom:14px}.brand{font-size:11px;letter-spacing:1.4px;color:#e7d4ff;font-weight:800}.hero h1{font-size:29px;line-height:1.15;margin:9px 0}.hero p{color:#e5d9f4;margin:0;font-size:14px}.flow{display:flex;gap:7px;flex-wrap:wrap;margin-top:15px;font-size:12px}.pill{display:inline-block;background:#332542;color:#e7cfff;padding:5px 9px;border-radius:99px;font-size:11px;margin-top:10px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:16px;margin:12px 0}.panel h2{font-size:18px;margin:0 0 8px}.hint{font-size:13px;color:var(--muted);line-height:1.55;margin:5px 0 13px}.btn{border:0;border-radius:12px;padding:12px 13px;min-height:46px;font-size:14px;font-weight:750;cursor:pointer}.primary{background:var(--accent);color:var(--accentText)}.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.btn:disabled{opacity:.45;cursor:not-allowed}.full{width:100%}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1;min-width:125px}.styles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.style{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 4px;color:var(--text);min-height:70px;cursor:pointer;font-size:13px}.style span{display:block;font-size:22px;margin-bottom:3px}.style.active{border:2px solid var(--accent);background:#38274a}label{font-size:13px;font-weight:700;display:block;margin:12px 0 5px}input[type=file]{width:100%;font-size:13px;color:var(--muted)}select,input[type=range]{width:100%;margin-top:6px}select{padding:11px;border-radius:11px;background:var(--panel2);color:var(--text);border:1px solid var(--line);font-size:15px}.range-label{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-top:12px}.status{background:#171321;border:1px solid var(--line);border-radius:11px;padding:11px;color:#e9def5;font-size:13px;line-height:1.5;margin-top:11px;min-height:43px}.wave{height:48px;display:flex;align-items:center;justify-content:center;gap:3px;background:#171321;border-radius:11px;margin:12px 0;overflow:hidden}.wave i{display:block;width:4px;border-radius:4px;background:#bd8cf0;height:var(--h)}audio{width:100%;margin-top:10px}.small{font-size:11px;color:var(--muted);line-height:1.5}.footer{text-align:center;color:var(--muted);font-size:12px;padding:15px 0}
+@media(max-width:350px){.styles{grid-template-columns:repeat(2,minmax(0,1fr))}.hero h1{font-size:25px}}
+</style></head>
+<body><main>
+<header class="hero"><div class="brand">PERSONAL MUSIC STUDIO</div><h1>Surmix</h1><p>আপনার কণ্ঠ, আপনার সুর — গান সাজান নিজের মতো</p><div class="flow"><span>🎤 Voice</span><span>→</span><span>🎹 Accompaniment</span><span>→</span><span>🎧 Song</span></div><span class="pill">Offline audio tools · No paid API</span></header>
+
+<section class="panel"><h2>১. গান রেকর্ড করুন বা আপলোড করুন</h2><p class="hint">মাইক্রোফোনে গান রেকর্ড করুন অথবা ফোন থেকে অডিও ফাইল নিন।</p><div class="row"><button class="btn primary" id="record">🎙️ রেকর্ড শুরু</button><button class="btn secondary" id="stop" disabled>⏹ থামান</button></div><label for="audioFile">অডিও ফাইল</label><input id="audioFile" type="file" accept="audio/*"><div class="wave"><i style="--h:14px"></i><i style="--h:25px"></i><i style="--h:18px"></i><i style="--h:36px"></i><i style="--h:23px"></i><i style="--h:43px"></i><i style="--h:19px"></i><i style="--h:31px"></i><i style="--h:15px"></i><i style="--h:38px"></i><i style="--h:22px"></i><i style="--h:45px"></i><i style="--h:20px"></i><i style="--h:30px"></i><i style="--h:13px"></i><i style="--h:36px"></i><i style="--h:24px"></i><i style="--h:42px"></i><i style="--h:18px"></i><i style="--h:27px"></i><i style="--h:14px"></i><i style="--h:35px"></i><i style="--h:21px"></i><i style="--h:44px"></i></div><div class="status" id="recordStatus" aria-live="polite">এখনও অডিও নির্বাচন করা হয়নি।</div><audio id="originalPlayer" controls hidden></audio></section>
+
+<section class="panel"><h2>২. ব্যাকিং মিউজিক নির্বাচন করুন</h2><p class="hint">অ্যাপটি আপনার কণ্ঠের সঙ্গে একটি সহজ chord/beat backing তৈরি করে মিশিয়ে দেবে।</p><div class="styles" id="styles">
+<button class="style active" data-style="modern"><span>🎹</span>বাংলা আধুনিক</button><button class="style" data-style="romantic"><span>💗</span>রোমান্টিক</button><button class="style" data-style="devotional"><span>🙏</span>ভক্তিমূলক</button><button class="style" data-style="guitar"><span>🎸</span>গিটার-স্টাইল</button><button class="style" data-style="piano"><span>🎼</span>পিয়ানো</button><button class="style" data-style="beat"><span>🥁</span>সফট বিট</button></div>
+<label for="mood">গানের মুড</label><select id="mood"><option value="calm">মিষ্টি ও শান্ত</option><option value="happy">আনন্দময়</option><option value="emotional">আবেগপূর্ণ</option><option value="energetic">উদ্দীপনাময়</option></select>
+<div class="range-label"><label for="tempo" style="margin:0">গানের গতি</label><strong id="tempoVal">82 BPM</strong></div><input id="tempo" type="range" min="60" max="130" value="82">
+<div class="range-label"><label for="voiceVol" style="margin:0">কণ্ঠের ভলিউম</label><strong id="voiceVal">100%</strong></div><input id="voiceVol" type="range" min="30" max="150" value="100">
+<div class="range-label"><label for="musicVol" style="margin:0">মিউজিকের ভলিউম</label><strong id="musicVal">35%</strong></div><input id="musicVol" type="range" min="0" max="100" value="35">
+<div class="range-label"><label for="reverb" style="margin:0">রিভার্ব ইফেক্ট</label><strong id="reverbVal">10%</strong></div><input id="reverb" type="range" min="0" max="35" value="10">
+<p class="small">এটি offline rule-based accompaniment generator; আপনার গানের সুর AI দিয়ে শনাক্ত করে না। নতুন AI মিউজিক মডেল সংযুক্ত করা হলে আরও স্বয়ংক্রিয় ফল পাওয়া যাবে।</p></section>
+
+<section class="panel"><h2>৩. সম্পূর্ণ গান তৈরি করুন</h2><p class="hint">আপনার ভয়েসের সঙ্গে নির্বাচিত স্টাইলের chord/beat যোগ করে WAV ফাইল তৈরি হবে।</p><button class="btn primary full" id="make" disabled>✨ ব্যাকিং মিউজিক তৈরি ও মিক্স করুন</button><div class="status" id="mixStatus" aria-live="polite">প্রথমে একটি অডিও রেকর্ড বা আপলোড করুন।</div><audio id="mixPlayer" controls hidden></audio><div class="row" style="margin-top:10px"><button class="btn secondary" id="download" disabled>⬇ WAV ডাউনলোড</button><button class="btn secondary" id="reset">রিসেট</button></div><p class="small">আউটপুট WAV ফরম্যাটে। MP3 export ও প্রকৃত AI music generation এই সংস্করণে নেই। অডিও আপনার ডিভাইসেই প্রসেস হয়; সার্ভারে আপলোড করা হয় না।</p></section>
+<div class="footer">🎶 Sing it. Style it. Make it yours.<br>Surmix · Full source prototype</div>
+</main>
+<script>
+(()=> {
+const $=id=>document.getElementById(id);
+let recorder=null,chunks=[],blob=null,originalURL=null,mixURL=null,stream=null,style='modern';
+const styles=$('styles');
+function msg(id,s){$(id).textContent=s}
+function revoke(u){if(u)URL.revokeObjectURL(u)}
+function setBlob(b,label){blob=b;revoke(originalURL);originalURL=URL.createObjectURL(b);$('originalPlayer').src=originalURL;$('originalPlayer').hidden=false;$('make').disabled=false;$('download').disabled=true;$('mixPlayer').hidden=true;revoke(mixURL);mixURL=null;msg('recordStatus',label+' · '+Math.max(1,Math.round(b.size/1024))+' KB');msg('mixStatus','অডিও প্রস্তুত। এখন ব্যাকিং মিউজিক তৈরি করুন।')}
+$('record').addEventListener('click',async()=>{
+ if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){msg('recordStatus','এই ব্রাউজারে রেকর্ডিং সমর্থিত নয়। HTTPS-এ খুলুন অথবা অডিও ফাইল আপলোড করুন।');return}
+ try{stream=await navigator.mediaDevices.getUserMedia({audio:true});let opt={};if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus'))opt.mimeType='audio/webm;codecs=opus';recorder=new MediaRecorder(stream,opt);chunks=[];recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data)};recorder.onstop=()=>{setBlob(new Blob(chunks,{type:recorder.mimeType||'audio/webm'}),'রেকর্ডিং সম্পন্ন');stream?.getTracks().forEach(t=>t.stop());stream=null};recorder.start();$('record').disabled=true;$('stop').disabled=false;msg('recordStatus','রেকর্ডিং চলছে… গান শেষ হলে থামান চাপুন।')}catch(e){msg('recordStatus','মাইক্রোফোন অনুমতি পাওয়া যায়নি। অনুমতি দিন বা অডিও ফাইল আপলোড করুন।')}
+});
+$('stop').addEventListener('click',()=>{if(recorder&&recorder.state!=='inactive')recorder.stop();$('record').disabled=false;$('stop').disabled=true});
+$('audioFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(f)setBlob(f,'ফাইল নির্বাচন করা হয়েছে: '+f.name)});
+styles.querySelectorAll('[data-style]').forEach(b=>b.addEventListener('click',()=>{style=b.dataset.style;styles.querySelectorAll('.style').forEach(x=>x.classList.toggle('active',x===b));msg('mixStatus','নির্বাচিত স্টাইল: '+b.textContent.trim()+'. এখন মিক্স তৈরি করতে পারেন।')}));
+[['tempo','tempoVal',' BPM'],['voiceVol','voiceVal','%'],['musicVol','musicVal','%'],['reverb','reverbVal','%']].forEach(([a,b,s])=>$(a).addEventListener('input',()=>$(b).textContent=$(a).value+s));
+const chords={
+ modern:[[0,4,7],[9,0,4],[5,9,0],[7,11,2]],
+ romantic:[[0,4,7,11],[9,0,4,7],[5,9,0,4],[7,11,2,5]],
+ devotional:[[0,4,7],[5,9,0],[0,4,7],[7,11,2]],
+ guitar:[[0,4,7],[7,11,2],[9,0,4],[5,9,0]],
+ piano:[[0,4,7,11],[5,9,0,4],[9,0,4,7],[7,11,2,5]],
+ beat:[[0,4,7],[5,9,0],[9,0,4],[7,11,2]]
+};
+function addTone(ctx,dest,when,freq,duration,volume,wave='sine'){
+ const o=ctx.createOscillator(),g=ctx.createGain();o.type=wave;o.frequency.setValueAtTime(freq,when);g.gain.setValueAtTime(0.0001,when);g.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),when+.025);g.gain.exponentialRampToValueAtTime(.0001,when+duration);o.connect(g);g.connect(dest);o.start(when);o.stop(when+duration+.04);
+}
+function addKick(ctx,dest,t,vol){const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(110,t);o.frequency.exponentialRampToValueAtTime(42,t+.14);g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+.17);o.connect(g);g.connect(dest);o.start(t);o.stop(t+.18)}
+function addNoise(ctx,dest,t,dur,vol){const n=Math.max(1,Math.floor(ctx.sampleRate*dur)),b=ctx.createBuffer(1,n,ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1);const s=ctx.createBufferSource(),g=ctx.createGain(),f=ctx.createBiquadFilter();s.buffer=b;f.type='highpass';f.frequency.value=5000;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(g);g.connect(dest);s.start(t);s.stop(t+dur)}
+function toWav(buffer){const c=buffer.numberOfChannels,n=buffer.length,rate=buffer.sampleRate,ab=new ArrayBuffer(44+n*c*2),v=new DataView(ab);const w=(p,s)=>{for(let i=0;i<s.length;i++)v.setUint8(p+i,s.charCodeAt(i))};w(0,'RIFF');v.setUint32(4,36+n*c*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,c,true);v.setUint32(24,rate,true);v.setUint32(28,rate*c*2,true);v.setUint16(32,c*2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*c*2,true);const channels=Array.from({length:c},(_,i)=>buffer.getChannelData(i));let p=44;for(let i=0;i<n;i++)for(let j=0;j<c;j++){let x=Math.max(-1,Math.min(1,channels[j][i]));v.setInt16(p,x<0?x*32768:x*32767,true);p+=2}return new Blob([ab],{type:'audio/wav'})}
+$('make').addEventListener('click',async()=>{
+ if(!blob)return;$('make').disabled=true;msg('mixStatus','অডিও বিশ্লেষণ ও ব্যাকিং মিউজিক তৈরি হচ্ছে…');
+ let decodeCtx;
+ try{
+  const bytes=await blob.arrayBuffer();decodeCtx=new(window.AudioContext||window.webkitAudioContext)();const vocal=await decodeCtx.decodeAudioData(bytes);
+  const rate=vocal.sampleRate,channels=Math.min(2,Math.max(1,vocal.numberOfChannels)),duration=vocal.duration;
+  if(!isFinite(duration)||duration<=0||duration>600)throw new Error('duration');
+  const offline=new OfflineAudioContext(channels,Math.ceil((duration+.3)*rate),rate);
+  const voice=offline.createBufferSource();voice.buffer=vocal;
+  const voiceGain=offline.createGain();voiceGain.gain.value=Number($('voiceVol').value)/100;
+  const comp=offline.createDynamicsCompressor();comp.threshold.value=-18;comp.knee.value=18;comp.ratio.value=2.5;comp.attack.value=.006;comp.release.value=.2;
+  voice.connect(voiceGain);voiceGain.connect(comp);comp.connect(offline.destination);
+  const musicBus=offline.createGain();musicBus.gain.value=Number($('musicVol').value)/100;musicBus.connect(offline.destination);
+  const reverbAmt=Number($('reverb').value)/100;
+  if(reverbAmt>0){const delay=offline.createDelay(.4);delay.delayTime.value=.12;const feedback=offline.createGain();feedback.gain.value=Math.min(.45,reverbAmt*1.2);const wet=offline.createGain();wet.gain.value=reverbAmt;musicBus.connect(delay);delay.connect(feedback);feedback.connect(delay);delay.connect(wet);wet.connect(offline.destination)}
+  const bpm=Number($('tempo').value),beat=60/bpm,bar=beat*4,progression=chords[style]||chords.modern;
+  const mood=$('mood').value;const root=mood==='devotional'?196:(mood==='happy'?220:196);
+  const end=duration;
+  for(let barNo=0,base=0;base<end;barNo++,base+=bar){
+    const chord=progression[barNo%progression.length];
+    // soft chord pads
+    chord.forEach(semi=>{const freq=root*Math.pow(2,semi/12);addTone(offline,musicBus,base,freq,Math.min(bar*.92,end-base),.045,style==='guitar'?'triangle':'sine');});
+    // low root note on beat 1 and 3
+    [0,2].forEach(b=>{const t=base+b*beat;if(t<end)addTone(offline,musicBus,t,root/2,Math.min(beat*.85,end-t),style==='beat'?.16:.085,'triangle')});
+    // arpeggio for piano/guitar/modern
+    if(['piano','guitar','modern','romantic'].includes(style)){
+      for(let k=0;k<8;k++){const t=base+k*beat/2;if(t>=end)break;const semi=chord[k%chord.length];addTone(offline,musicBus,t,root*Math.pow(2,semi/12)*2,Math.min(beat*.38,end-t),style==='piano'?.045:.027,style==='guitar'?'triangle':'sine')}
+    }
+    // simple kick and soft hats for beat style
+    if(['beat','modern'].includes(style)){for(let b=0;b<4;b++){const t=base+b*beat;if(t<end)addKick(offline,musicBus,t,style==='beat'?.15:.07)}for(let k=0;k<8;k++){const t=base+k*beat/2;if(t<end)addNoise(offline,musicBus,t,.035,style==='beat'?.018:.008)}}
+    // gentle bell-like devotional accents
+    if(style==='devotional'){[0,2].forEach(b=>{const t=base+b*beat;if(t<end)addTone(offline,musicBus,t,root*2,Math.min(.5,end-t),.035,'sine')})}
+  }
+  voice.start(0);const rendered=await offline.startRendering();const wav=toWav(rendered);revoke(mixURL);mixURL=URL.createObjectURL(wav);$('mixPlayer').src=mixURL;$('mixPlayer').hidden=false;$('download').disabled=false;
+  msg('mixStatus','মিউজিক মিক্স সম্পন্ন! নির্বাচিত স্টাইলের সহজ chord/beat কণ্ঠের সঙ্গে মেশানো হয়েছে। এটি AI সুর শনাক্তকরণ নয়—আপনি এখন শুনে WAV ডাউনলোড করতে পারবেন।');
+  await decodeCtx.close();
+ }catch(err){msg('mixStatus','এই অডিও প্রসেস করা যায়নি। অন্য অডিও ফাইল (MP3/WAV) দিয়ে চেষ্টা করুন। বড় ফাইলের জন্য ফোনে পর্যাপ্ত মেমোরি দরকার হতে পারে.');try{await decodeCtx?.close()}catch(e){}}
+ finally{$('make').disabled=false}
+});
+$('download').addEventListener('click',()=>{if(!mixURL)return;const a=document.createElement('a');a.href=mixURL;a.download='sur-ai-mixed-song.wav';document.body.appendChild(a);a.click();a.remove()});
+$('reset').addEventListener('click',()=>{if(recorder&&recorder.state!=='inactive')recorder.stop();stream?.getTracks().forEach(t=>t.stop());stream=null;$('record').disabled=false;$('stop').disabled=true;$('audioFile').value='';$('originalPlayer').hidden=true;$('mixPlayer').hidden=true;$('make').disabled=true;$('download').disabled=true;blob=null;revoke(originalURL);revoke(mixURL);originalURL=mixURL=null;msg('recordStatus','এখনও অডিও নির্বাচন করা হয়নি।');msg('mixStatus','প্রথমে একটি অডিও রেকর্ড বা আপলোড করুন।')});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+})();
+</script></body></html>

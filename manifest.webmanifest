@@ -1,0 +1,9 @@
+{
+  "name": "Surmix",
+  "short_name": "Surmix",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#100d19",
+  "theme_color": "#25133f",
+  "description": "Record voice and mix simple accompaniment offline."
+}
